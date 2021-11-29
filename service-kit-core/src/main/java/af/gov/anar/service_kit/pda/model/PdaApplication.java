@@ -33,7 +33,7 @@ public class PdaApplication  extends BaseEntity {
 
     private String docOriginalName;
 
-    private String docNumOfPages;
+    private long docNumOfPages;
 
     private boolean verified;
 

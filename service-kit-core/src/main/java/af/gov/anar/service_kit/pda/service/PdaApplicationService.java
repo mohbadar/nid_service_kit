@@ -32,12 +32,15 @@ public class PdaApplicationService {
     @Value("${upload.pda.dir}")
     private String fileUploadDirectory;
 
-    public Map<String, Object> save(String familyNo, MultipartFile file){
+    public Map<String, Object> save(long pdfNoPages, String onlineFormFamilyNo, String familyNo, MultipartFile file){
 
         Map<String, Object>  response = new HashMap<>();
 
         PdaApplication nidFamilyForm = new PdaApplication();
         nidFamilyForm.setNidFamilyNo(familyNo);
+        nidFamilyForm.setOnlineFormFamilyNo(familyNo);
+        nidFamilyForm.setDocOriginalName(file.getOriginalFilename());
+        nidFamilyForm.setDocNumOfPages(pdfNoPages);
 
         if(file == null){
             throw new RuntimeException("File Not Exist Exception");
