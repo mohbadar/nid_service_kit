@@ -20,7 +20,6 @@ public class BaseEntity extends AuditEnabledEntity {
     @Id
     public String id;
 
-
     @Column(name = "MODULE_ID")
     @JsonIgnore
     private String moduleId;
@@ -36,7 +35,10 @@ public class BaseEntity extends AuditEnabledEntity {
 
     public BaseEntity() {
         if (id == null) {
-            this.id = String.format("DABS-%s", UUID.randomUUID().toString());
+            this.id = UUID.randomUUID().toString();
+        }
+        if(moduleId == null || moduleId.equalsIgnoreCase("")){
+            moduleId="NID_SERVICE_KIT";
         }
     }
 

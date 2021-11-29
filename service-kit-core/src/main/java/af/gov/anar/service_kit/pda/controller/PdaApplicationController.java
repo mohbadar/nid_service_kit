@@ -41,7 +41,7 @@ public class PdaApplicationController {
     }
 
     @PostMapping(value = "/process-docs/download", produces = MediaType.APPLICATION_OCTET_STREAM_VALUE)
-    public ResponseEntity<Resource> printSingleConsumerBill(@RequestBody(required = true) String uuid)
+    public ResponseEntity<Resource> downloadDocument(@RequestBody(required = true) String uuid)
             throws IOException, InterruptedException, URISyntaxException {
         return ResponseEntity.ok()
                 .contentType(MediaType.APPLICATION_OCTET_STREAM)
