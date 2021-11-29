@@ -3,6 +3,7 @@ package af.gov.anar.service_kit.pda.service;
 import af.gov.anar.service_kit.util.FileUploadService;
 import af.gov.anar.service_kit.pda.model.PdaApplication;
 import af.gov.anar.service_kit.pda.repository.PdaApplicationRepository;
+import org.apache.pdfbox.pdmodel.PDDocument;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.io.ByteArrayResource;
@@ -11,6 +12,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.io.File;
 import java.io.IOException;
 import java.net.URISyntaxException;
 import java.nio.file.Files;
@@ -32,7 +34,7 @@ public class PdaApplicationService {
     @Value("${upload.pda.dir}")
     private String fileUploadDirectory;
 
-    public Map<String, Object> save(long pdfNoPages, String onlineFormFamilyNo, String familyNo, MultipartFile file){
+    public Map<String, Object> save(String onlineFormFamilyNo, String familyNo, MultipartFile file) throws IOException {
 
         Map<String, Object>  response = new HashMap<>();
 
@@ -40,7 +42,8 @@ public class PdaApplicationService {
         nidFamilyForm.setNidFamilyNo(familyNo);
         nidFamilyForm.setOnlineFormFamilyNo(familyNo);
         nidFamilyForm.setDocOriginalName(file.getOriginalFilename());
-        nidFamilyForm.setDocNumOfPages(pdfNoPages);
+
+
 
         if(file == null){
             throw new RuntimeException("File Not Exist Exception");
@@ -50,6 +53,11 @@ public class PdaApplicationService {
         if (Objects.nonNull(fileUrl)) {
                 nidFamilyForm.setDocPath(fileUrl);
         }
+
+        File tmpFile =fileUploadService.getFile(file, fileUploadDirectory+"tmp/");
+        int pageNo = getNumberOfPdfPages(tmpFile);
+        nidFamilyForm.setDocNumOfPages(pageNo);
+        tmpFile.delete();
 
         nidFamilyFormRepository.save(nidFamilyForm);
 
@@ -72,6 +80,12 @@ public class PdaApplicationService {
         ByteArrayResource resource = new ByteArrayResource(Files.readAllBytes(path));
 
         return resource;
+    }
+
+    public int  getNumberOfPdfPages(File file) throws IOException {
+        PDDocument document = new PDDocument();
+        document.save(file);
+        return document.getNumberOfPages();
     }
 
 }

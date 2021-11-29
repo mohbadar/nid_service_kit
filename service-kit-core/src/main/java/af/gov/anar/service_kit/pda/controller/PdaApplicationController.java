@@ -25,12 +25,11 @@ public class PdaApplicationController {
     @PostMapping(value = "/process-docs/store", consumes = { MediaType.MULTIPART_FORM_DATA_VALUE,
             MediaType.APPLICATION_JSON_VALUE, MediaType.ALL_VALUE })
     public ResponseEntity<Map<String, Object>> store(
-            @RequestParam(name = "pdfNoPages") long pdfNoPages,
             @RequestParam(name = "onlineFormFamilyNo") String onlineFormFamilyNo,
             @RequestParam(name = "familyNo") String familyNo,
-            @RequestParam(name = "file", required = false) MultipartFile file) {
+            @RequestParam(name = "file", required = false) MultipartFile file) throws IOException {
 
-        return ResponseEntity.ok(nidFamilyFormService.save(pdfNoPages,onlineFormFamilyNo, familyNo, file));
+        return ResponseEntity.ok(nidFamilyFormService.save(onlineFormFamilyNo, familyNo, file));
     }
 
     @PostMapping(value = "/process-docs/search", consumes = { MediaType.MULTIPART_FORM_DATA_VALUE,

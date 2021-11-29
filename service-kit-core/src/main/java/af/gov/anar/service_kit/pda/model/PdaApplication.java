@@ -31,10 +31,13 @@ public class PdaApplication  extends BaseEntity {
     @Column(nullable = false)
     private String docPath;
 
+    @Column()
     private String docOriginalName;
 
+    @Column()
     private long docNumOfPages;
 
+    @Column()
     private boolean verified;
 
 }
