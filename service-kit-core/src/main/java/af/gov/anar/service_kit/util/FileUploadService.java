@@ -55,37 +55,5 @@ public class FileUploadService {
 
     }
 
-
-
-    public File getFile(MultipartFile file, String uploadDirectory) {
-        File uploadFolder = new File(uploadDirectory);
-        String finalPath = null;
-        // create the root directory if it does not exist
-        if (!uploadFolder.exists()) {
-            uploadFolder.mkdir();
-        }
-        try {
-            File f = new File(uploadFolder.getAbsolutePath() + "/" + file.getOriginalFilename());
-            // create the file
-            if (!f.exists()) {
-
-                f.createNewFile();
-            }
-            FileOutputStream fout = new FileOutputStream(f);
-            fout.write(file.getBytes());
-            finalPath = f.getAbsolutePath();
-            fout.close();
-
-            return f;
-
-        } catch (Exception e) {
-
-            //System.out.println("Exception occured while uploading the attachment" + e.toString());
-
-        }
-        return null;
-
-    }
-
 }
 

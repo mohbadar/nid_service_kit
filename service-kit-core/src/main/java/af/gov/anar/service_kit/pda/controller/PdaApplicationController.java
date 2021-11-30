@@ -48,4 +48,23 @@ public class PdaApplicationController {
                 .body(nidFamilyFormService.download(uuid));
     }
 
+
+    @PostMapping(value = "/process-docs/verification/list", consumes = { MediaType.MULTIPART_FORM_DATA_VALUE,
+            MediaType.APPLICATION_JSON_VALUE, MediaType.ALL_VALUE })
+    public ResponseEntity<Map<String, Object>> getListOfUnVerifiedDocs(
+            @RequestParam(name = "verification_type") String vertificationType,
+            @RequestParam(name = "center_code") String centerCode) throws IOException {
+
+        return ResponseEntity.ok(nidFamilyFormService.getListOfUnVerifiedDocs(vertificationType, centerCode));
+    }
+
+
+    @GetMapping(value = "/process-docs/verification/verify/{id}", consumes = { MediaType.MULTIPART_FORM_DATA_VALUE,
+            MediaType.APPLICATION_JSON_VALUE, MediaType.ALL_VALUE })
+    public ResponseEntity<Map<String, Object>> verify(@PathVariable(name = "id") String id) throws IOException {
+
+        return ResponseEntity.ok(nidFamilyFormService.verify(id));
+    }
+
+
 }

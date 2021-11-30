@@ -54,7 +54,7 @@ public class PdaApplicationService {
                 nidFamilyForm.setDocPath(fileUrl);
         }
 
-        File tmpFile =fileUploadService.getFile(file, fileUploadDirectory+"tmp/");
+        File tmpFile =new File(fileUrl);
         int pageNo = getNumberOfPdfPages(tmpFile);
         nidFamilyForm.setDocNumOfPages(pageNo);
         tmpFile.delete();
@@ -88,4 +88,32 @@ public class PdaApplicationService {
         return document.getNumberOfPages();
     }
 
+    public Map<String, Object> getListOfUnVerifiedDocs(String vertificationType, String centerCode) {
+        Map<String, Object> response = new HashMap<>();
+
+        if(vertificationType.equalsIgnoreCase("CENTER")){
+            response.put("data", nidFamilyFormRepository.findByVerifiedAndNidFamilyNoStartsWith(false, centerCode));
+        }else{
+            response.put("data", nidFamilyFormRepository.findByVerified(false));
+        }
+
+        response.put("status", HttpStatus.OK);
+        return response;
+    }
+
+    public Map<String, Object> verify(String id) {
+        Map<String, Object> response = new HashMap<>();
+
+        PdaApplication pdaApplication= nidFamilyFormRepository.findById(id).orElse(null);
+
+        if(pdaApplication == null)
+            throw new RuntimeException("No Application Found Exception");
+
+        pdaApplication.setVerified(true);
+        nidFamilyFormRepository.save(pdaApplication);
+
+        response.put("status", HttpStatus.OK);
+        response.put("data", id);
+        return response;
+    }
 }
