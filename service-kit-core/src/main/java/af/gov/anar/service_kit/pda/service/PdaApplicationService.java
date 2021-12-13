@@ -57,7 +57,7 @@ public class PdaApplicationService {
         File tmpFile =new File(fileUrl);
         int pageNo = getNumberOfPdfPages(tmpFile);
         nidFamilyForm.setDocNumOfPages(pageNo);
-        tmpFile.delete();
+//        tmpFile.delete();
 
         nidFamilyFormRepository.save(nidFamilyForm);
 
