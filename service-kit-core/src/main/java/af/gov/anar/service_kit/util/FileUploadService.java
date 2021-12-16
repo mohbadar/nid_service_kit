@@ -25,6 +25,8 @@ public class FileUploadService {
      * Author: Jalil Haidari
      **/
     public String saveAttachment(MultipartFile file, String uploadDirectory) {
+
+        String fileName = Long.toString(System.currentTimeMillis()).concat("_").concat(file.getOriginalFilename());
         File uploadFolder = new File(uploadDirectory);
         //System.out.println(">>>>>>>>>>> the dir:" + uploadDirectory);
         String finalPath = null;
@@ -35,7 +37,7 @@ public class FileUploadService {
         try {
             //System.out.println(
             //       ">>>>>>>>>>> the dir:" + uploadFolder.getAbsolutePath() + "/" + file.getOriginalFilename());
-            File f = new File(uploadFolder.getAbsolutePath() + "/" + file.getOriginalFilename());
+            File f = new File(uploadFolder.getAbsolutePath() + "/" + fileName);
             // create the file
             if (!f.exists()) {
 
@@ -48,7 +50,7 @@ public class FileUploadService {
 
         } catch (Exception e) {
 
-            //System.out.println("Exception occured while uploading the attachment" + e.toString());
+            System.out.println("Exception occured while uploading the attachment" + e.toString());
 
         }
         return finalPath;

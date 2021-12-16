@@ -10,6 +10,6 @@ import java.util.List;
 public interface PdaApplicationRepository extends JpaRepository<PdaApplication, String> {
 
     PdaApplication findByNidFamilyNo(String familyNo);
-    List<PdaApplication> findByVerified(boolean verified);
-    List<PdaApplication> findByVerifiedAndNidFamilyNoStartsWith(boolean verified, String nidFamilyNo);
+    List<PdaApplication> findByVerifiedAndRejected(boolean verified, boolean rejected);
+    List<PdaApplication> findByVerifiedAndRejectedAndNidFamilyNoStartsWith(boolean verified,boolean rejected, String nidFamilyNo);
 }

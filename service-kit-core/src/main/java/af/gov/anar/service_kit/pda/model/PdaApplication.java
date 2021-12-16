@@ -40,4 +40,7 @@ public class PdaApplication  extends BaseEntity {
     @Column()
     private boolean verified;
 
+    @Column()
+    private boolean rejected;
+
 }
