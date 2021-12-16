@@ -54,7 +54,8 @@ public class PdaApplicationController {
     public ResponseEntity<Map<String, Object>> getListOfUnVerifiedDocs(
             @RequestParam(name = "verification_type") String vertificationType,
             @RequestParam(name = "center_code") String centerCode) throws IOException {
-
+        System.out.println("VerificationType: "  + vertificationType);
+        System.out.println("centercode: "  + centerCode);
         return ResponseEntity.ok(nidFamilyFormService.getListOfUnVerifiedDocs(vertificationType, centerCode));
     }
 
