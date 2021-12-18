@@ -3,6 +3,7 @@ package af.gov.anar.service_kit.pda.service;
 import af.gov.anar.service_kit.util.FileUploadService;
 import af.gov.anar.service_kit.pda.model.PdaApplication;
 import af.gov.anar.service_kit.pda.repository.PdaApplicationRepository;
+import af.gov.anar.service_kit.util.HijriDateUtility;
 import org.apache.pdfbox.pdmodel.PDDocument;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -36,6 +37,7 @@ public class PdaApplicationService {
 
     public Map<String, Object> save(String onlineFormFamilyNo, String familyNo, MultipartFile file) throws IOException {
 
+        String uploadPath = this.fileUploadDirectory.concat(HijriDateUtility.getCurrentJalaliDateAsString());
         Map<String, Object>  response = new HashMap<>();
 
         PdaApplication nidFamilyForm = new PdaApplication();
@@ -49,7 +51,7 @@ public class PdaApplicationService {
             throw new RuntimeException("File Not Exist Exception");
         }
 
-        String fileUrl = fileUploadService.saveAttachment(file, fileUploadDirectory);
+        String fileUrl = fileUploadService.saveAttachment(file, uploadPath);
         if (Objects.nonNull(fileUrl)) {
                 nidFamilyForm.setDocPath(fileUrl);
         }
@@ -57,7 +59,7 @@ public class PdaApplicationService {
 //        File tmpFile =new File(fileUrl);
 //        int pageNo = getNumberOfPdfPages(tmpFile);
 //        nidFamilyForm.setDocNumOfPages(pageNo);
-//        tmpFile.delete();
+//        tmpFile.();
 
         nidFamilyFormRepository.save(nidFamilyForm);
 
@@ -92,10 +94,14 @@ public class PdaApplicationService {
         Map<String, Object> response = new HashMap<>();
 
         if(vertificationType.equalsIgnoreCase("CENTER")){
-            response.put("data", nidFamilyFormRepository.findByVerifiedAndNidFamilyNoStartsWith(false, centerCode));
-//            response.put("data", nidFamilyFormRepository.findNidFamilyNoContaining(centerCode));
+// <<<<<<< issues_fix_branch
+//             response.put("data", nidFamilyFormRepository.findByVerifiedAndNidFamilyNoStartsWith(false, centerCode));
+// //            response.put("data", nidFamilyFormRepository.findNidFamilyNoContaining(centerCode));
+// =======
+            response.put("data", nidFamilyFormRepository.findByVerifiedAndRejectedAndNidFamilyNoStartsWith(false,false, centerCode));
+// >>>>>>> main
         }else{
-            response.put("data", nidFamilyFormRepository.findByVerified(false));
+            response.put("data", nidFamilyFormRepository.findByVerifiedAndRejected(false,false));
         }
 
         response.put("status", HttpStatus.OK);

@@ -17,4 +17,7 @@ public interface PdaApplicationRepository extends JpaRepository<PdaApplication, 
 
 //    @Query(value = "SELECT fn FROM nid_pda_application fn WHERE fn.nid_family_no LIKE %-:centerCode-%", nativeQuery = true)
 //    List<PdaApplication> findNidFamilyNoContaining(@Param("centerCode") String centerCode);
+  
+    List<PdaApplication> findByVerifiedAndRejected(boolean verified, boolean rejected);
+    List<PdaApplication> findByVerifiedAndRejectedAndNidFamilyNoStartsWith(boolean verified,boolean rejected, String nidFamilyNo);
 }
