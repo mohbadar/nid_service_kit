@@ -4,6 +4,8 @@ import af.gov.anar.service_kit.util.FileUploadService;
 import af.gov.anar.service_kit.pda.model.PdaApplication;
 import af.gov.anar.service_kit.pda.repository.PdaApplicationRepository;
 import af.gov.anar.service_kit.util.HijriDateUtility;
+import com.lowagie.text.pdf.PdfReader;
+import com.lowagie.text.pdf.RandomAccessFileOrArray;
 import org.apache.pdfbox.pdmodel.PDDocument;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -42,7 +44,7 @@ public class PdaApplicationService {
 
         PdaApplication nidFamilyForm = new PdaApplication();
         nidFamilyForm.setNidFamilyNo(familyNo);
-        nidFamilyForm.setOnlineFormFamilyNo(familyNo);
+        nidFamilyForm.setOnlineFormFamilyNo(onlineFormFamilyNo);
         nidFamilyForm.setDocOriginalName(file.getOriginalFilename());
 
 
@@ -56,10 +58,8 @@ public class PdaApplicationService {
                 nidFamilyForm.setDocPath(fileUrl);
         }
 
-//        File tmpFile =new File(fileUrl);
-//        int pageNo = getNumberOfPdfPages(tmpFile);
+//        int pageNo = efficientPDFPageCount(fileUrl);
 //        nidFamilyForm.setDocNumOfPages(pageNo);
-//        tmpFile.();
 
         nidFamilyFormRepository.save(nidFamilyForm);
 
@@ -90,16 +90,22 @@ public class PdaApplicationService {
         return document.getNumberOfPages();
     }
 
+
+    private int efficientPDFPageCount(String path) throws IOException {
+        RandomAccessFileOrArray file = new RandomAccessFileOrArray(path, false, true );
+        PdfReader reader = new PdfReader(String.valueOf(file));
+        int ret = reader.getNumberOfPages();
+        reader.close();
+        return ret;
+    }
+
     public Map<String, Object> getListOfUnVerifiedDocs(String vertificationType, String centerCode) {
         Map<String, Object> response = new HashMap<>();
 
         if(vertificationType.equalsIgnoreCase("CENTER")){
-// <<<<<<< issues_fix_branch
-//             response.put("data", nidFamilyFormRepository.findByVerifiedAndNidFamilyNoStartsWith(false, centerCode));
-// //            response.put("data", nidFamilyFormRepository.findNidFamilyNoContaining(centerCode));
-// =======
-            response.put("data", nidFamilyFormRepository.findByVerifiedAndRejectedAndNidFamilyNoStartsWith(false,false, centerCode));
-// >>>>>>> main
+        //     response.put("data", nidFamilyFormRepository.findByVerifiedAndNidFamilyNoStartsWith(false, centerCode));
+ //            response.put("data", nidFamilyFormRepository.findNidFamilyNoContaining(centerCode));
+            response.put("data", nidFamilyFormRepository.findNidFamilyNoContainingAndRejectedAndVerified(centerCode,false, false));
         }else{
             response.put("data", nidFamilyFormRepository.findByVerifiedAndRejected(false,false));
         }

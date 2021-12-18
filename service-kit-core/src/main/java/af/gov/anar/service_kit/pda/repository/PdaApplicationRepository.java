@@ -12,11 +12,11 @@ import java.util.List;
 public interface PdaApplicationRepository extends JpaRepository<PdaApplication, String> {
 
     PdaApplication findByNidFamilyNo(String familyNo);
-    List<PdaApplication> findByVerified(boolean verified);
-    List<PdaApplication> findByVerifiedAndNidFamilyNoStartsWith(boolean verified, String nidFamilyNo);
+//    List<PdaApplication> findByVerified(boolean verified);
+//    List<PdaApplication> findByVerifiedAndNidFamilyNoStartsWith(boolean verified, String nidFamilyNo);
 
-//    @Query(value = "SELECT fn FROM nid_pda_application fn WHERE fn.nid_family_no LIKE %-:centerCode-%", nativeQuery = true)
-//    List<PdaApplication> findNidFamilyNoContaining(@Param("centerCode") String centerCode);
+    @Query(value = "SELECT * FROM nid_pda_application WHERE split_part(nid_family_no,'-', 2) =:centerCode AND rejected=:rejected AND verified=:verified", nativeQuery = true)
+    List<PdaApplication> findNidFamilyNoContainingAndRejectedAndVerified(@Param("centerCode") String centerCode,@Param("rejected") boolean rejected,@Param("verified") boolean verified);
   
     List<PdaApplication> findByVerifiedAndRejected(boolean verified, boolean rejected);
     List<PdaApplication> findByVerifiedAndRejectedAndNidFamilyNoStartsWith(boolean verified,boolean rejected, String nidFamilyNo);

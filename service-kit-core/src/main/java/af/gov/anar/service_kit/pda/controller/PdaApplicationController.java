@@ -10,6 +10,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
+import javax.validation.Valid;
 import java.io.IOException;
 import java.net.URISyntaxException;
 import java.util.Map;
@@ -32,10 +33,10 @@ public class PdaApplicationController {
         return ResponseEntity.ok(nidFamilyFormService.save(onlineFormFamilyNo, familyNo, file));
     }
 
-    @PostMapping(value = "/process-docs/search", consumes = { MediaType.MULTIPART_FORM_DATA_VALUE,
+    @GetMapping(value = "/process-docs/search/{familyNo}", consumes = { MediaType.MULTIPART_FORM_DATA_VALUE,
             MediaType.APPLICATION_JSON_VALUE, MediaType.ALL_VALUE })
-    public ResponseEntity<PdaApplication> registerOfflineConsumer(
-            @RequestParam(name = "familyNo") String familyNo) {
+    public ResponseEntity<PdaApplication> searchDocument( @Valid
+            @PathVariable(name = "familyNo", required = true) String familyNo) {
         return ResponseEntity.ok(nidFamilyFormService.search(familyNo));
 
     }
