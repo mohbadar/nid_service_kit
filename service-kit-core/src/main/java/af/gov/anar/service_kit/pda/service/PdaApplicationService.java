@@ -94,7 +94,12 @@ public class PdaApplicationService {
         Map<String, Object> response = new HashMap<>();
 
         if(vertificationType.equalsIgnoreCase("CENTER")){
+// <<<<<<< issues_fix_branch
+//             response.put("data", nidFamilyFormRepository.findByVerifiedAndNidFamilyNoStartsWith(false, centerCode));
+// //            response.put("data", nidFamilyFormRepository.findNidFamilyNoContaining(centerCode));
+// =======
             response.put("data", nidFamilyFormRepository.findByVerifiedAndRejectedAndNidFamilyNoStartsWith(false,false, centerCode));
+// >>>>>>> main
         }else{
             response.put("data", nidFamilyFormRepository.findByVerifiedAndRejected(false,false));
         }
